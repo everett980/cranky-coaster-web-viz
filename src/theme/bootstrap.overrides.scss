@@ -15,10 +15,12 @@
   background-color: transparent;
 }
 
-.my-first-barchart .rd3-barchart-bar {
-	fill: black;
-}
-
 .good {
-	fill: red !important;
+	fill: #B2D58D !important;
+}
+.ok {
+	fill: #F5EF9D !important;
+}
+.bad {
+	fill: #FF9E9E !important;
 }

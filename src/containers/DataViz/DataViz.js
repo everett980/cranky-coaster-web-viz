@@ -100,44 +100,59 @@ export default class DataViz extends Component {
   	const els = Array.from(window.document.querySelectorAll('.my-first-barchart .rd3-barchart-bar'));
 	
 	els.forEach((el) => {
-		if(el.getAttribute('height') > 100) {
-			console.log('hi');
+		if(el.getAttribute('height') > 120) {
 			try {
 				jquery(el).addClass('good');
 			} catch (e) {
 				console.error(e);
 			}
-			console.log('bye');
+		} else if (el.getAttribute('height') > 85) {
+			try {
+				jquery(el).addClass('ok');
+			} catch (e) {
+				console.error(e);
+			}
+		} else {
+			try {
+				jquery(el).addClass('bad');
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	});
   }	
   componentDidUpdate() {
-  	const els = Array.from(window.document.querySelectorAll('.my-first-barchart .rd3-barchart-bar'));
+  	const els = Array.from(window.document.querySelectorAll('.rd3-barchart-bar'));
 
 	els.forEach((el) => {
-		if(el.getAttribute('height') > 100) {
-			console.log('hi');
+		if(el.getAttribute('height') > 120) {
 			try {
 				jquery(el).addClass('good');
 			} catch (e) {
 				console.error(e);
 			}
-			console.log('bye');
+		} else if (el.getAttribute('height') > 85) {
+			try {
+				jquery(el).addClass('ok');
+			} catch (e) {
+				console.error(e);
+			}
+		} else {
+			try {
+				jquery(el).addClass('bad');
+			} catch (e) {
+				console.error(e);
+			}
 		}
 	});
   }
   render() {
-	function myTest() {
-		console.log(arguments);
-		console.log('test');
-	}
     return (
       <div className="container">
         <h1>Data Visualization</h1>
         <Helmet title="Data Visualization"/>
-		View Datas Dude
 		<BarChart className='my-first-barchart' data={barData} title={`Today's Drinking`} width={800} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
-		<BarChart data={barData3} title={`Average Sip Size`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
+		<BarChart data={barData3} title={`Average Sip Size`} width={800} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
 		<BarChart data={barData2} title={`Last Five Days' Drinking`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
       </div>
     );
