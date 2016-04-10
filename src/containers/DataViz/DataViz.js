@@ -52,20 +52,25 @@ export default class DataViz extends Component {
   
   componentDidMount() {
 	  fetch(`https://crankycoaster.firebaseio.com/.json`).then(data => data.json()).then(sipObj => {
-		sipsArr = sipObj[Object.keys(sipObj)[0]];
+		sipsArr = Object.values(sipObj);
+	    sipsArr = sipsArr.filter((sipEntry) => {return !Array.isArray(sipEntry)});
+	  	console.log(sipsArr);
 	  	todaySips = sipsArr.filter((sip) => {
-			return moment(sip.time).date() === moment().subtract(1, 'days').date();
+			return moment(sip.time).date() === moment().date();
 			//GET RID OF THE SUBTRACT 1 DAYS, THIS IS FOR TESTING
 		});
+		console.log(todaySips);
 		todayChartData = todaySips.reduce((prev, sip) => {
 			const xVal = moment(sip.time).hour();
 			prev[xVal] = {
 				x: xVal,
-				y: sip.changeInForce * 1.3 + ( ( prev[xVal] && prev[xVal].y) || 0),
-				count: 1 + ( ( prev[xVal] && prev[xVal].y) || 0)
+				y: ( sip.changeInForce || 0 ) * 1.3 + ( ( prev[xVal] && prev[xVal].y) || 0),
+				count: 1 + ( ( prev[xVal] && prev[xVal].count) || 0)
 			}
+			console.log(xVal, prev);
 			return prev;
 		}, []);
+		console.log(todayChartData);
 		barData = [
   			{'name': 'Series B',
 			 'values': todayChartData
