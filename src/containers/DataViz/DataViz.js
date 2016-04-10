@@ -59,7 +59,7 @@ export default class DataViz extends Component {
 		lastFiveChartData = lastFiveDaysNoToday.reduce((prev, sip) => {
 			const xVal = moment(sip.time).date() - minDay;
 			prev[xVal] = {
-				x: xVal,
+				x: 5 - xVal,
 				y: sip.changeInForce + ( ( prev[xVal] && prev[xVal].y ) || 0 )
 			}
 			return prev;
@@ -78,7 +78,7 @@ export default class DataViz extends Component {
         <Helmet title="Data Visualization"/>
 		View Datas Dude
 		<BarChart data={barData} title={`Today's Drinking`} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Force, for now`}/>
-		<BarChart data={barData2} title={`Last Five Days' Drinking`} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Force, for now`}/>
+		<BarChart data={barData2} title={`Last Five Days' Drinking`} xAxisLabel={`Days Before Today`} yAxisLabel={`Force, for now`}/>
       </div>
     );
   }
