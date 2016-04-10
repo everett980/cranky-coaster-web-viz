@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import { BarChart } from '../../../react-d3';
+import { BarChart, PieChart } from '../../../react-d3';
 import moment from 'moment';
 import jquery from 'jquery';
 
@@ -19,6 +19,16 @@ let barData2 = [
 		'values': [
 			{'x': 1, 'y': 4},
 		],
+	}
+]
+let pieData = [
+	{
+		label: 'Setup',
+		value: 25
+	},
+	{
+		label: 'Retup',
+		value: 45
 	}
 ]
 
@@ -94,6 +104,17 @@ export default class DataViz extends Component {
 			'values': lastFiveChartData
 			}
 		];
+
+		const fiveDaySum = lastFiveChartData.reduce((prev, curr) => {
+			return prev + curr.y;
+		}, 0);
+		pieData = lastFiveChartData.map((xy) => {
+			return {
+				label: xy.x + ' day'+(xy.x === 1 ? '' : 's')+' ago.',
+				value: Math.floor ( xy.y * 100 / fiveDaySum + .5 ) / 100
+			}
+		});
+		console.log(pieData);
 	});
 
   
@@ -147,13 +168,14 @@ export default class DataViz extends Component {
 	});
   }
   render() {
+		/* <BarChart data={barData2} title={`Last Five Days' Drinking`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/> */
     return (
       <div className="container">
         <h1>Data Visualization</h1>
         <Helmet title="Data Visualization"/>
 		<BarChart className='my-first-barchart' data={barData} title={`Today's Drinking`} width={800} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
 		<BarChart data={barData3} title={`Average Sip Size`} width={800} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
-		<BarChart data={barData2} title={`Last Five Days' Drinking`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
+		<PieChart data={pieData} title="Last Five Days' Drinking" height={400} width={400}radius={100} innerRadius={20} sectorBorderColor="white"/>
       </div>
     );
   }
