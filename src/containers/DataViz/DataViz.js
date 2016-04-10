@@ -100,7 +100,7 @@ export default class DataViz extends Component {
   	const els = Array.from(window.document.querySelectorAll('.my-first-barchart .rd3-barchart-bar'));
 	
 	els.forEach((el) => {
-		if(el.getAttribute('height') > 60) {
+		if(el.getAttribute('height') > 100) {
 			console.log('hi');
 			try {
 				jquery(el).addClass('good');
@@ -112,8 +112,10 @@ export default class DataViz extends Component {
 	});
   }	
   componentDidUpdate() {
+  	const els = Array.from(window.document.querySelectorAll('.my-first-barchart .rd3-barchart-bar'));
+
 	els.forEach((el) => {
-		if(el.getAttribute('height') > 60) {
+		if(el.getAttribute('height') > 100) {
 			console.log('hi');
 			try {
 				jquery(el).addClass('good');
