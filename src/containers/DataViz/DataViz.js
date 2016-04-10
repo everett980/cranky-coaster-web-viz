@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Helmet from 'react-helmet';
-import { BarChart } from 'react-d3';
+import { BarChart } from '../../../react-d3';
 import moment from 'moment';
+import jquery from 'jquery';
 
 let barData = [
 	{
@@ -21,9 +22,19 @@ let barData2 = [
 	}
 ]
 
+let barData3 = [
+	{
+		'name': 'Series A',
+		'values': [
+			{'x': 1, 'y': 4},
+		],
+	}
+]
+
 let sipsArr;
 let todaySips;
 let todayChartData;
+let todayAverageData;
 let lastFiveDaysNoToday;
 let lastFiveChartData;
 
@@ -33,13 +44,15 @@ export default class DataViz extends Component {
 	  fetch(`https://crankycoaster.firebaseio.com/.json`).then(data => data.json()).then(sipObj => {
 		sipsArr = sipObj[Object.keys(sipObj)[0]];
 	  	todaySips = sipsArr.filter((sip) => {
-			return moment(sip.time).date() === moment().date();
+			return moment(sip.time).date() === moment().subtract(1, 'days').date();
+			//GET RID OF THE SUBTRACT 1 DAYS, THIS IS FOR TESTING
 		});
 		todayChartData = todaySips.reduce((prev, sip) => {
 			const xVal = moment(sip.time).hour();
 			prev[xVal] = {
 				x: xVal,
-				y: sip.changeInForce + ( ( prev[xVal] && prev[xVal].y) || 0)
+				y: sip.changeInForce * 1.3 + ( ( prev[xVal] && prev[xVal].y) || 0),
+				count: 1 + ( ( prev[xVal] && prev[xVal].y) || 0)
 			}
 			return prev;
 		}, []);
@@ -47,6 +60,18 @@ export default class DataViz extends Component {
   			{'name': 'Series B',
 			 'values': todayChartData
 			}
+		];
+
+		todayAverageData = todayChartData.map(dataPoint => {
+			return {
+				x: dataPoint.x,
+				y: dataPoint.y / dataPoint.count
+			}
+		});
+		barData3 = [
+		{'name': 'Series B',
+			'values': todayAverageData
+		}
 		];
 		
 		lastFiveDaysNoToday = sipsArr.filter((sip) => {
@@ -60,7 +85,7 @@ export default class DataViz extends Component {
 			const xVal = moment(sip.time).date() - minDay;
 			prev[xVal] = {
 				x: 5 - xVal,
-				y: sip.changeInForce + ( ( prev[xVal] && prev[xVal].y ) || 0 )
+				y: sip.changeInForce * 1.3 + ( ( prev[xVal] && prev[xVal].y ) || 0 )
 			}
 			return prev;
 		}, []);
@@ -70,15 +95,48 @@ export default class DataViz extends Component {
 			}
 		];
 	});
+
+  
+  	const els = Array.from(window.document.querySelectorAll('.my-first-barchart .rd3-barchart-bar'));
+	
+	els.forEach((el) => {
+		if(el.getAttribute('height') > 60) {
+			console.log('hi');
+			try {
+				jquery(el).addClass('good');
+			} catch (e) {
+				console.error(e);
+			}
+			console.log('bye');
+		}
+	});
   }	
+  componentDidUpdate() {
+	els.forEach((el) => {
+		if(el.getAttribute('height') > 60) {
+			console.log('hi');
+			try {
+				jquery(el).addClass('good');
+			} catch (e) {
+				console.error(e);
+			}
+			console.log('bye');
+		}
+	});
+  }
   render() {
+	function myTest() {
+		console.log(arguments);
+		console.log('test');
+	}
     return (
       <div className="container">
         <h1>Data Visualization</h1>
         <Helmet title="Data Visualization"/>
 		View Datas Dude
-		<BarChart data={barData} title={`Today's Drinking`} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Force, for now`}/>
-		<BarChart data={barData2} title={`Last Five Days' Drinking`} xAxisLabel={`Days Before Today`} yAxisLabel={`Force, for now`}/>
+		<BarChart className='my-first-barchart' data={barData} title={`Today's Drinking`} width={800} xAxisLabel={`Hour (Military Time)`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
+		<BarChart data={barData3} title={`Average Sip Size`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
+		<BarChart data={barData2} title={`Last Five Days' Drinking`} width={800} xAxisLabel={`Days Before Today`} yAxisLabel={`Volume (ml)`} fill={`#000000`}/>
       </div>
     );
   }
