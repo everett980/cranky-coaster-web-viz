@@ -76,7 +76,7 @@ export default class App extends Component {
 
           <Navbar.Collapse eventKey={0}>
             <Nav navbar pullRight>
-              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
+              <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/everett980/cranky-coaster">
                 <i className="fa fa-github"/>
               </NavItem>
             </Nav>
@@ -88,11 +88,10 @@ export default class App extends Component {
         </div>
 
         <div className="well text-center">
-          Have questions? Ask for help <a
-          href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-          target="_blank">on Github</a> or in the <a
-          href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank">#react-redux-universal</a> Discord channel.
-        </div>
+          Check us out <a
+          href="https://github.com/everett980/cranky-coaster"
+          target="_blank">on Github!</a>
+	  </div>
       </div>
     );
   }
